@@ -1,25 +1,69 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GTA VI trophy checklist</title>
+<title>Platinum Desk — Evidence Edition · GTA VI Trophy Guide &amp; Tracker</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1>GTA VI trophy checklist</h1>
-  <p id="progress">0 of 55 earned</p>
+<header class="desk-head">
+  <div class="desk-title">
+    <h1>PLATINUM DESK <span class="edition">— EVIDENCE EDITION</span></h1>
+    <p class="tagline">GTA VI trophy guide &amp; tracker. Every step cited, every claim sourced: steps are anchored on the official PlayStation trophy list and cross-checked against independent mirrors.</p>
+  </div>
+  <div class="evidence-strip" id="evidence-strip" aria-label="Evidence counts">
+    <div class="stat"><span class="stat-num" id="stat-trophies">55</span><span class="stat-label">trophies</span></div>
+    <div class="stat"><span class="stat-num" id="stat-steps">276</span><span class="stat-label">cited steps</span></div>
+    <div class="stat"><span class="stat-num" id="stat-citations">591</span><span class="stat-label">citations</span></div>
+    <div class="stat"><span class="stat-num" id="stat-backed">187</span><span class="stat-label">steps backed by 2+ sources</span></div>
+    <div class="stat"><span class="stat-num" id="stat-sources">13</span><span class="stat-label">dated sources</span></div>
+  </div>
 </header>
-<div class="controls">
-  <label>Grade <select id="grade"><option value="all">All</option><option value="platinum">Platinum</option><option value="gold">Gold</option><option value="silver">Silver</option><option value="bronze">Bronze</option></select></label>
-  <button id="export" type="button">Export progress</button>
-  <label class="import">Import progress <input id="import" type="file" accept="application/json"></label>
-</div>
-<table>
-  <thead><tr><th>Earned</th><th>Trophy</th><th>Grade</th><th>How to get it</th></tr></thead>
-  <tbody id="rows"></tbody>
-</table>
+
+<section class="tracker" id="tracker" aria-label="Platinum tracker">
+  <div class="tracker-main">
+    <div class="tracker-pct"><span id="pct">0%</span><span class="tracker-pct-label">platinum progress</span></div>
+    <div class="tracker-bar-wrap">
+      <div class="tracker-bar" role="progressbar" aria-label="Completion"><div class="tracker-fill" id="fill"></div></div>
+      <div class="pace" id="pace">0 / 55 trophies · 55 to go · ≈55 h left of the ≈55 h roadmap</div>
+    </div>
+  </div>
+  <div class="grade-counts" id="grade-counts">
+    <span class="gc gc-platinum">Platinum <b id="gc-platinum">0/1</b></span>
+    <span class="gc gc-gold">Gold <b id="gc-gold">0/2</b></span>
+    <span class="gc gc-silver">Silver <b id="gc-silver">0/6</b></span>
+    <span class="gc gc-bronze">Bronze <b id="gc-bronze">0/46</b></span>
+    <span class="gc gc-missable">Missable <b id="gc-missable">0/7</b></span>
+  </div>
+</section>
+
+<nav class="roadmap" id="roadmap" aria-label="Roadmap phases"></nav>
+
+<section class="controls" aria-label="Filters">
+  <div class="filter-group" id="grade-filters">
+    <button data-grade="all" class="active">All grades</button>
+    <button data-grade="platinum">Platinum</button>
+    <button data-grade="gold">Gold</button>
+    <button data-grade="silver">Silver</button>
+    <button data-grade="bronze">Bronze</button>
+  </div>
+  <label class="toggle"><input type="checkbox" id="missable-only"> Missable only</label>
+  <label class="toggle"><input type="checkbox" id="hide-done"> Hide done</label>
+  <button id="expand-all">Expand all</button>
+  <button id="collapse-all">Collapse all</button>
+  <button id="reset-progress">Reset progress</button>
+  <span class="showing" id="showing"></span>
+</section>
+
+<main id="trophy-list" aria-label="Trophy guide"></main>
+
+<footer class="audit" id="audit">
+  <h2>Source audit</h2>
+  <p class="audit-note">How backing works on this desk: a step is <b>anchored</b> when the official PlayStation trophy list (S1) is among its citations — the official list states what the trophy requires. Steps are <b>cross-checked</b> against independent mirrors (guide sites and the community wiki) for how to do it. A step marked <span class="backed-badge">2+ BACKED</span> carries two or more independent citations. Steps that rest on mirrors only show exactly those mirrors — this desk never claims official backing a step does not have. Counts in the header are computed from the guide data itself, not typed in.</p>
+  <ul class="source-list" id="source-list"></ul>
+</footer>
+
 <script type="module" src="app.js"></script>
 </body>
 </html>
