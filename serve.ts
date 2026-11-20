@@ -1,64 +1,63 @@
-// A tiny static server for app/ (Node 22, standard library only), so the guide can be run locally without a
-// build step: `node serve.ts` serves app/ on http://localhost:8080 (`--port <n>` for another port). It sends the MIME
-// types a browser needs, refuses any path outside app/, and otherwise does nothing clever: this is a development
-// convenience, not a web server for the internet.
-import { createReadStream, statSync } from 'node:fs';
+// Platinum Desk — Evidence Edition: local development server.
+// Serves the static guide in app/ at http://localhost:8080 so it can be used
+// and screenshotted without a build step: `node serve.ts [--port <n>]`.
+// Node 22 standard library only; paths are confined to app/.
+
+import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = resolve(fileURLToPath(new URL('./app', import.meta.url)));
-const args = process.argv.slice(2);
-const portIndex = args.indexOf('--port');
-const requested = portIndex === -1 ? 8080 : Number(args[portIndex + 1]);
-const port = Number.isInteger(requested) && requested > 0 && requested < 65536 ? requested : 8080;
+const appRoot = resolve(fileURLToPath(new URL('./app', import.meta.url)));
 
-const MIME: Record<string, string> = {
+function portFromArgs(argv: string[]): number {
+  const flag = argv.indexOf('--port');
+  const value = flag === -1 ? 8080 : Number(argv[flag + 1]);
+  return Number.isInteger(value) && value > 0 && value < 65536 ? value : 8080;
+}
+
+const CONTENT_TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
   '.ico': 'image/x-icon',
-  '.woff2': 'font/woff2',
-  '.webmanifest': 'application/manifest+json',
 };
 
-createServer((request, response) => {
-  const url = new URL(request.url ?? '/', 'http://localhost');
+function resolveRequestPath(rawUrl: string): string | null {
   let pathname: string;
   try {
-    pathname = decodeURIComponent(url.pathname);
+    pathname = decodeURIComponent(new URL(rawUrl, 'http://localhost').pathname);
   } catch {
-    response.writeHead(400).end('bad request');
-    return;
+    return null;
   }
   if (pathname.endsWith('/')) pathname += 'index.html';
-  const file = resolve(join(root, normalize(pathname)));
-  if (file !== root && !file.startsWith(root + sep)) {
-    response.writeHead(403).end('forbidden');
-    return;
-  }
-  let size: number;
-  try {
-    const stats = statSync(file);
-    if (!stats.isFile()) throw new Error('not a file');
-    size = stats.size;
-  } catch {
-    response.writeHead(404).end('not found');
+  const candidate = resolve(join(appRoot, normalize(pathname)));
+  if (candidate !== appRoot && !candidate.startsWith(appRoot + sep)) return null;
+  return candidate;
+}
+
+const server = createServer((request, response) => {
+  const file = request.url ? resolveRequestPath(request.url) : null;
+  if (file === null || !existsSync(file) || !statSync(file).isFile()) {
+    response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' }).end('not found');
     return;
   }
   response.writeHead(200, {
-    'content-type': MIME[extname(file).toLowerCase()] ?? 'application/octet-stream',
-    'content-length': size,
+    'content-type': CONTENT_TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream',
+    'content-length': statSync(file).size,
     'cache-control': 'no-store',
   });
   createReadStream(file).pipe(response);
-}).listen(port, '127.0.0.1', () => {
-  console.log(`app/ is on http://localhost:${port}`);
+});
+
+const port = portFromArgs(process.argv.slice(2));
+server.listen(port, '127.0.0.1', () => {
+  console.log(`Platinum Desk app/ is being served at http://localhost:${port}`);
 });

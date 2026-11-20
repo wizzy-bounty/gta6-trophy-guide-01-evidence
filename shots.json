@@ -1,5 +1,1 @@
-[
-  { "file": "1-checklist.jpg", "path": "/", "viewport": { "width": 1280, "height": 800 } },
-  { "file": "2-silver.jpg", "path": "/", "grade": "silver", "viewport": { "width": 1280, "height": 800 } },
-  { "file": "3-bronze.jpg", "path": "/", "grade": "bronze", "scroll": 1400, "viewport": { "width": 1280, "height": 800 } }
-]
+[{"file":"1-desk.jpg","note":"Default one-screen desk: evidence header counts, tracker progress bar, roadmap strip, first trophies with citation chips and 2+ BACKED markers.","path":"/","viewport":{"height":800,"width":1280}},{"file":"2-tracker.jpg","note":"Tracker in use: 14 trophies checked off, completion percentage, per-grade counts and platinum pace line updated.","path":"/#check=welcome-to-leonida,first-wheels,keys-to-the-city,open-for-business,small-town-big-trouble,chapter-closed-act-1,ghost-of-port-maldito,hot-pursuit,big-fish,wheel-dealer,photo-finish,leonida-legend,full-tank,treasure-of-the-keys","viewport":{"height":800,"width":1280}},{"file":"3-trophy.jpg","note":"One trophy opened in full: Treasure of the Keys step list with per-step source chips and its per-trophy source citation list.","path":"/#open=treasure-of-the-keys","viewport":{"height":800,"width":1280}}]
