@@ -37,10 +37,11 @@ copyTree(join(repoDir, 'screenshots'), join(outputDir, 'screenshots'));
 
 // Caps mirror the scorer's gate: at most 4 screenshots of 256 KiB each, at
 // most 993 app files / 48 MiB of app content, dossier text capped at 160 KiB.
-const dossier = buildDossier(outputDir, {
+const DOSSIER_CAPS = {
   text_max_bytes: 163840,
   screenshots: { max: 4, max_bytes: 262144 },
   app_max_files: 993,
   app_max_bytes: 50331648,
-});
+};
+const dossier = buildDossier(outputDir, DOSSIER_CAPS);
 writeFileSync(join(outputDir, 'dossier.json'), dossier);
