@@ -220,11 +220,15 @@ function applyHashState() {
   const open = params.get('open');
   if (open && TROPHIES.some((t) => t.id === open)) {
     state.expanded = new Set([open]);
-    requestAnimationFrame(() => {
-      const el = document.getElementById(`card-${open}`);
-      if (el) el.scrollIntoView({ block: 'start' });
-    });
+    state.pendingScrollTo = open;
   }
+}
+
+function scrollToPendingCard() {
+  // Runs after the list has rendered: bring the #open trophy to the top.
+  if (!state.pendingScrollTo) return;
+  const el = document.getElementById(`card-${state.pendingScrollTo}`);
+  if (el) el.scrollIntoView({ block: 'start' });
 }
 
 function bindControls() {
@@ -296,3 +300,4 @@ applyHashState();
 bindControls();
 renderAll();
 renderSourceAudit();
+scrollToPendingCard();
